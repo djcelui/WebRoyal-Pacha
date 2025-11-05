@@ -1,0 +1,73 @@
+<!-- ase_side_bar.html: Módulo de sidebar reutilizable para ARK -->
+<aside class="sidebar">
+  <nav class="sidebar__nav">
+    <ul class="sidebar__menu">
+      <li class="sidebar__item"><a href="index.html" class="sidebar__link">Inicio</a></li>
+      <li class="sidebar__item"><a href="ase_home.html#mapas" class="sidebar__link">Mapas</a></li>
+      <li class="sidebar__item"><a href="ase_config.html" class="sidebar__link">Configuración</a></li>
+      <li class="sidebar__item"><a href="ASE_economia.html" class="sidebar__link">Economía</a></li>
+      <li class="sidebar__item"><a href="ASE_comandos.html" class="sidebar__link">Comandos</a></li>
+      <li class="sidebar__item"><a href="ase_shop.html" class="sidebar__link">Tienda</a></li>
+    </ul>
+  </nav>
+
+  <!-- Mobile toggle button -->
+  <button class="sidebar__toggle" aria-label="Abrir menú" aria-expanded="false">
+    <span class="sidebar__toggle-bar"></span>
+    <span class="sidebar__toggle-bar"></span>
+    <span class="sidebar__toggle-bar"></span>
+  </button>
+</aside>
+
+<script>
+  // Toggle mobile sidebar: maintains responsive behavior
+  (function(){
+    // Find this sidebar fragment's root element
+    var scriptEl = document.currentScript;
+    var sidebarRoot = scriptEl && scriptEl.previousElementSibling;
+    // If previousElementSibling is not the sidebar, fallback to searching
+    if(!sidebarRoot || !sidebarRoot.classList || !sidebarRoot.classList.contains('sidebar')){
+      sidebarRoot = document.querySelector('.sidebar');
+    }
+    if(!sidebarRoot) return;
+    
+    var toggle = sidebarRoot.querySelector('.sidebar__toggle');
+    var sidebar = sidebarRoot;
+    
+    if(!toggle || !sidebar) return;
+    
+    toggle.addEventListener('click', function(e){
+      var expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!expanded));
+      sidebar.classList.toggle('sidebar--open');
+      document.body.classList.toggle('sidebar-open');
+    });
+    
+    // Close when clicking outside on mobile
+    document.addEventListener('click', function(e){
+      if(window.innerWidth <= 768 && !sidebarRoot.contains(e.target) && sidebar.classList.contains('sidebar--open')){
+        sidebar.classList.remove('sidebar--open');
+        document.body.classList.remove('sidebar-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+    
+    // Close on Escape
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && sidebar.classList.contains('sidebar--open')){
+        sidebar.classList.remove('sidebar--open');
+        document.body.classList.remove('sidebar-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', function(){
+      if(window.innerWidth > 768){
+        sidebar.classList.remove('sidebar--open');
+        document.body.classList.remove('sidebar-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  })();
+</script>

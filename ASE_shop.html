@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tienda ARK - RoyalServers</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    /* Reset mínimo y seguridad contra scroll horizontal */
+    html,body{margin:0;padding:0;overflow-x:hidden;background:#080710;color:#fff;font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto}
+   /* Espacio superior para que el contenido no quede oculto detrás del nav fijo */
+   :root{--ase-nav-offset:72px}
+   body{padding-top:var(--ase-nav-offset)}
+   @media(max-width:640px){ :root{--ase-nav-offset:56px} body{padding-top:var(--ase-nav-offset)} }
+  </style>
+</head>
+<body class="has-sidebar">
+  <!-- Navigation bar container -->
+  <header class="header">
+    <div id="nav-bar-home-container"></div>
+  </header>
+  
+  <!-- Sidebar container -->
+  <div id="sidebar-container"></div>
+  
+  <section class="section container">
+    <h2 class="section__title">Pases de ARK</h2>
+    <div class="shop__grid">
+      <!-- Pase Raptor -->
+      <div class="shop-card">
+        <img src="img/raptor_pass.png" alt="Pase Raptor" class="shop-card__img">
+        <h3 class="shop-card__title">Pase Raptor</h3>
+        <p>¡Domina la isla con la velocidad y agilidad del Raptor!</p>
+        <span class="shop-card__price">$7.00 USD</span>
+        <div class="payment-options">
+          <a href="https://www.paypal.com/paypalme/djcelui" target="_blank" class="btn btn--primary">PayPal $7</a>
+          <a href="https://mpago.la/2Q8KjXZ" target="_blank" class="btn btn--secondary">Mercado Pago $7</a>
+        </div>
+      </div>
+      <!-- Pase Rex -->
+      <div class="shop-card">
+        <img src="img/rex_pass.png" alt="Pase Rex" class="shop-card__img">
+        <h3 class="shop-card__title">Pase Rex</h3>
+        <p>Conviértete en el rey de la isla con el poder del Tyrannosaurus Rex.</p>
+        <span class="shop-card__price">$10.00 USD</span>
+        <div class="payment-options">
+          <a href="https://www.paypal.com/paypalme/djcelui" target="_blank" class="btn btn--primary">PayPal $10</a>
+          <a href="https://mpago.la/2Q8KjXZ" target="_blank" class="btn btn--secondary">Mercado Pago $10</a>
+        </div>
+      </div>
+      <!-- Pase Giga -->
+      <div class="shop-card">
+        <img src="img/giga_pass.png" alt="Pase Giga" class="shop-card__img">
+        <h3 class="shop-card__title">Pase Giga</h3>
+        <p>El depredador más temido de ARK. ¡Domina con el Giganotosaurus!</p>
+        <span class="shop-card__price">$20.00 USD</span>
+        <div class="payment-options">
+          <a href="https://www.paypal.com/paypalme/djcelui" target="_blank" class="btn btn--primary">PayPal $20</a>
+          <a href="https://mpago.la/2Q8KjXZ" target="_blank" class="btn btn--secondary">Mercado Pago $20</a>
+        </div>
+      </div>
+      <!-- Pase Titan -->
+      <div class="shop-card">
+        <img src="img/titan_pass.png" alt="Pase Titan" class="shop-card__img">
+        <h3 class="shop-card__title">Pase Titan</h3>
+        <p>El pase definitivo. ¡Conquista ARK con el poder de los Titanes!</p>
+        <span class="shop-card__price">$30.00 USD</span>
+        <div class="payment-options">
+          <a href="https://www.paypal.com/paypalme/djcelui" target="_blank" class="btn btn--primary">PayPal $30</a>
+          <a href="https://mpago.la/2Q8KjXZ" target="_blank" class="btn btn--secondary">Mercado Pago $30</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="foot-home-container"></div>
+
+  <script>
+    // Cargar navbar dinámicamente
+    fetch('nav_bar_home.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('nav-bar-home-container').innerHTML = html;
+        // Execute scripts manually since innerHTML doesn't execute them
+        initializeNavbarScripts();
+      });
+    
+    fetch('ase_side_bar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('sidebar-container').innerHTML = html;
+      });
+
+    // Initialize navbar functionality after dynamic loading
+    function initializeNavbarScripts() {
+      // Mobile navigation toggle
+      (function(){
+        var navRoot = document.querySelector('.nav.container');
+        if(!navRoot) return;
+        var toggle = navRoot.querySelector('.nav__toggle');
+        var list = navRoot.querySelector('.nav__list');
+        if(!toggle || !list) return;
+        
+        // Check if already initialized
+        if(toggle.hasAttribute('data-mobile-initialized')) return;
+        toggle.setAttribute('data-mobile-initialized', 'true');
+
+        toggle.addEventListener('click', function(e){
+          var expanded = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', String(!expanded));
+          list.classList.toggle('active');
+        });
+        
+        // Close when clicking outside
+        document.addEventListener('click', function(e){
+          if(!navRoot.contains(e.target) && list.classList.contains('active')){
+            list.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+        
+        // Close on Escape
+        document.addEventListener('keydown', function(e){
+          if(e.key === 'Escape' && list.classList.contains('active')){
+            list.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+      })();
+
+      // Dropdown menu for 'Juegos'
+      (function(){
+        var navRoot = document.querySelector('.nav.container');
+        if(!navRoot) return;
+        var dropdown = navRoot.querySelector('.nav__dropdown');
+        if(!dropdown) return;
+        var btn = dropdown.querySelector('.nav__dropdown-toggle');
+        if(!btn) return;
+
+        // Check if already initialized
+        if(btn.hasAttribute('data-dropdown-initialized')) return;
+        btn.setAttribute('data-dropdown-initialized', 'true');
+
+        // Toggle function
+        function toggleDropdown(open){
+          var isOpen = dropdown.classList.contains('open');
+          var shouldOpen = typeof open === 'boolean' ? open : !isOpen;
+          dropdown.classList.toggle('open', shouldOpen);
+          btn.setAttribute('aria-expanded', String(shouldOpen));
+        }
+
+        // click opens/closes
+        btn.addEventListener('click', function(e){
+          e.stopPropagation();
+          toggleDropdown();
+        });
+
+        // close when clicking outside
+        document.addEventListener('click', function(e){
+          if(!dropdown.contains(e.target) && dropdown.classList.contains('open')){
+            toggleDropdown(false);
+          }
+        });
+
+        // keyboard: Escape closes
+        document.addEventListener('keydown', function(e){
+          if(e.key === 'Escape' && dropdown.classList.contains('open')){
+            toggleDropdown(false);
+            btn.focus();
+          }
+        });
+
+        // Ensure submenu links close the dropdown on click
+        var submenuLinks = dropdown.querySelectorAll('.nav__submenu a');
+        submenuLinks.forEach(function(a){
+          a.addEventListener('click', function(){
+            toggleDropdown(false);
+          });
+        });
+      })();
+    }
+  </script>
+  <script>
+    // Cargar footer dinámicamente
+    fetch('foot_home.html').then(r=>r.text()).then(html=>document.getElementById('foot-home-container').innerHTML=html).catch(()=>{});
+  </script>
+</body>
+</html> 

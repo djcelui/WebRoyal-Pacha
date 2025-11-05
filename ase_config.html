@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración ARK - RoyalServers</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    /* Custom CSS Variables for ARK Config Module */
+    :root {
+      --ark-primary: #5865F2;     /* Discord Blue - Primary Actions */
+      --ark-secondary: #FFD166;   /* Warning Yellow - Secondary Actions */
+      --ark-danger: #FF6B6B;      /* Alert Red - Dangerous/Banned Items */
+      --ark-success: #4ECDC4;     /* Success Teal - Enabled Features */
+      --ark-background: #0A0E1A;  /* Dark Background */
+      --ark-surface: #1B1035;     /* Card Background */
+      --ark-surface-light: #252545; /* Lighter Surface */
+      --ark-text: #D8D8E0;        /* Primary Text */
+      --ark-text-muted: #9CA3AF;  /* Muted Text */
+      --ark-border: #374151;      /* Border Color */
+      --ark-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+      --ark-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+      --ase-nav-offset: 72px;
+    }
+
+    @media(max-width:640px) { 
+      :root { --ase-nav-offset: 56px; } 
+    }
+
+    /* Global Styles */
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background: var(--ark-background);
+      color: var(--ark-text);
+      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      padding-top: var(--ase-nav-offset);
+    }
+
+    /* Main Container */
+    .ark-config-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: var(--ark-background);
+    }
+
+    .ark-page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 2rem 0;
+      background: linear-gradient(135deg, var(--ark-surface) 0%, var(--ark-surface-light) 100%);
+      border-radius: 16px;
+      border: 1px solid var(--ark-border);
+      box-shadow: var(--ark-shadow-lg);
+    }
+
+    .ark-page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--ark-primary);
+      margin-bottom: 0.5rem;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .ark-page-subtitle {
+      font-size: 1.1rem;
+      color: var(--ark-text-muted);
+      margin: 0;
+    }
+
+    /* Section Styles */
+    .ark-section {
+      margin-bottom: 3rem;
+    }
+
+    .ark-section-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--ark-border);
+    }
+
+    .ark-section-icon {
+      font-size: 1.5rem;
+      margin-right: 0.75rem;
+      width: 2rem;
+      text-align: center;
+    }
+
+    .ark-section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--ark-text);
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Card Grid System */
+    .ark-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Specific 2x2 grid for Configuración General */
+    .ark-general-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .ark-general-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ark-card {
+      background: var(--ark-surface);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--ark-border);
+      box-shadow: var(--ark-shadow);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ark-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--ark-primary);
+      transition: all 0.3s ease;
+    }
+
+    .ark-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--ark-shadow-lg);
+      border-color: rgba(106, 170, 255, 0.3);
+    }
+
+    .ark-card:hover::before {
+      height: 6px;
+      background: linear-gradient(90deg, rgba(106, 170, 255, 0.2) 0%, rgba(255, 209, 102, 0.2) 100%);
+    }
+
+    .ark-card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--ark-text);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .ark-card-icon {
+      margin-right: 0.5rem;
+      font-size: 1rem;
+    }
+
+    /* List Styles */
+    .ark-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .ark-list-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .ark-list-item:last-child {
+      border-bottom: none;
+    }
+
+    .ark-list-icon {
+      margin-right: 0.75rem;
+      font-size: 0.875rem;
+      width: 1.25rem;
+      text-align: center;
+    }
+
+    .ark-list-text {
+      flex: 1;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    /* Status Icons */
+    .icon-enabled {
+      color: var(--ark-success);
+    }
+
+    .icon-disabled {
+      color: var(--ark-text-muted);
+    }
+
+    .icon-banned {
+      color: var(--ark-danger);
+    }
+
+    .icon-warning {
+      color: var(--ark-secondary);
+    }
+
+    /* Accordion Styles */
+    .ark-accordion {
+      border: 1px solid var(--ark-border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--ark-shadow);
+    }
+
+    .ark-accordion-header {
+      background: var(--ark-surface);
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid var(--ark-border);
+    }
+
+    /* Keep the chevron icon visually at the end */
+    .ark-accordion-header .ark-accordion-icon {
+      margin-left: auto;
+    }
+
+    .ark-accordion-header:hover {
+      background: var(--ark-surface-light);
+    }
+
+    .ark-accordion-title {
+      font-weight: 600;
+      color: var(--ark-text);
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .ark-accordion-icon {
+      transition: transform 0.3s ease;
+      color: var(--ark-primary);
+    }
+
+    .ark-accordion.active .ark-accordion-icon {
+      transform: rotate(180deg);
+    }
+
+    .ark-accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: var(--ark-surface-light);
+    }
+
+    .ark-accordion.active .ark-accordion-content {
+      max-height: 2000px;
+    }
+
+    .ark-accordion-body {
+      padding: 1.5rem;
+    }
+
+    /* Table Styles */
+    .ark-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .ark-table th,
+    .ark-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--ark-border);
+    }
+
+    .ark-table th {
+      background: var(--ark-surface-light);
+      font-weight: 600;
+      color: var(--ark-primary);
+    }
+
+    .ark-table tr:hover {
+      background: rgba(88, 101, 242, 0.03);
+    }
+
+    /* Badge Styles */
+    .ark-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin: 0.125rem;
+    }
+
+    .ark-badge-primary {
+      background: rgba(88, 101, 242, 0.2);
+      color: var(--ark-primary);
+      border: 1px solid var(--ark-primary);
+    }
+
+    .ark-badge-danger {
+      background: rgba(255, 107, 107, 0.2);
+      color: var(--ark-danger);
+      border: 1px solid var(--ark-danger);
+    }
+
+    .ark-badge-warning {
+      background: rgba(255, 209, 102, 0.2);
+      color: var(--ark-secondary);
+      border: 1px solid var(--ark-secondary);
+    }
+
+    /* Tooltip Styles */
+    .ark-tooltip {
+      position: relative;
+      cursor: help;
+      display: inline-block;
+    }
+
+    .ark-tooltip-text {
+      visibility: hidden;
+      width: 250px;
+      background: var(--ark-surface-light);
+      color: var(--ark-text);
+      text-align: center;
+      border-radius: 8px;
+      padding: 0.75rem;
+      position: absolute;
+      z-index: 1000;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -125px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      border: 1px solid var(--ark-border);
+      box-shadow: var(--ark-shadow-lg);
+      font-size: 0.875rem;
+    }
+
+    .ark-tooltip:hover .ark-tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .ark-config-container {
+        padding: 1rem;
+      }
+
+      .ark-page-title {
+        font-size: 2rem;
+      }
+
+      .ark-cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ark-section-title {
+        font-size: 1.25rem;
+      }
+
+      .ark-accordion-header {
+        padding: 0.75rem 1rem;
+      }
+
+      .ark-accordion-body {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .ark-page-title {
+        font-size: 1.75rem;
+      }
+
+      .ark-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+
+    /* Special Styling for Game Bar */
+    .game-bar {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      background: #181818;
+      padding-left: 24px;
+      border-bottom: 1px solid var(--ark-border);
+    }
+
+    .game-bar img {
+      height: 28px;
+      vertical-align: middle;
+    }
+
+    .game-bar-title {
+      margin-left: 12px;
+      /* Use the site's gold accent (same as Discord button) */
+      color: var(--primary-color);
+      font-size: 1.1rem;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="ark-config-page has-sidebar">
+  <!-- Navigation bar container -->
+  <header class="header">
+    <div id="nav-bar-home-container"></div>
+  </header>
+  
+  <!-- Sidebar container -->
+  <div id="sidebar-container"></div>
+  
+  <main class="ark-config-container">
+    <!-- Page Header -->
+    <div class="ark-page-header">
+      <h1 class="ark-page-title">
+        <i class="fas fa-cogs" style="margin-right: 0.5rem;"></i>
+        Configuración del Servidor ARK
+      </h1>
+      <p class="ark-page-subtitle">
+        Configuraciones detalladas del servidor ARK: Survival Evolved de RoyalServers
+      </p>
+    </div>
+
+    <!-- CONFIG GENERAL Section -->
+    <section class="ark-section">
+      <div class="ark-section-header">
+        <i class="fas fa-cog ark-section-icon" style="color: var(--ark-primary);"></i>
+        <h2 class="ark-section-title">Configuración General</h2>
+      </div>
+    <!-- Top-level accordion for Configuración General -->
+    <div class="ark-accordion">
+      <div class="ark-accordion-header" onclick="toggleAccordion('section-general')">
+        <h3 class="ark-accordion-title">
+          <i class="fas fa-list ark-card-icon" style="margin-right:0.5rem;color:var(--ark-primary)"></i>
+          Ver configuración general
+        </h3>
+        <i class="fas fa-chevron-down ark-accordion-icon"></i>
+      </div>
+      <div class="ark-accordion-content" id="section-general">
+        <div class="ark-accordion-body">
+          <div class="ark-cards-grid ark-general-grid">
+        <div class="ark-card">
+          <h3 class="ark-card-title">
+            <i class="fas fa-toggle-on ark-card-icon icon-enabled"></i>
+            Funciones Habilitadas
+          </h3>
+          <ul class="ark-list">
+            <li class="ark-list-item" data-config="permanent_diseases">
+              <i class="fas fa-check ark-list-icon icon-enabled"></i>
+              <span class="ark-list-text">Enfermedades permanentes activadas</span>
+            </li>
+            <li class="ark-list-item" data-config="unlimited_mindwipe">
+              <i class="fas fa-check ark-list-icon icon-enabled"></i>
+              <span class="ark-list-text">Uso ilimitado de mindwipe</span>
+            </li>
+            <li class="ark-list-item" data-config="gamma_config">
+              <i class="fas fa-check ark-list-icon icon-enabled"></i>
+              <span class="ark-list-text">Configuración de gamma activado</span>
+            </li>
+            <li class="ark-list-item" data-config="third_person">
+              <i class="fas fa-check ark-list-icon icon-enabled"></i>
+              <span class="ark-list-text">Habilitada tercera persona</span>
+            </li>
+            <li class="ark-list-item" data-config="floating_damage">
+              <i class="fas fa-check ark-list-icon icon-enabled"></i>
+              <span class="ark-list-text">Daño flotante visible</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="ark-card">
+          <h3 class="ark-card-title">
+            <i class="fas fa-exchange-alt ark-card-icon" style="color: var(--ark-secondary);"></i>
+            Transferencias y PvP
+          </h3>
+          <ul class="ark-list">
+            <li class="ark-list-item" data-config="tribute_transfer">
+              <i class="fas fa-check ark-list-icon icon-enabled"></i>
+              <span class="ark-list-text">Transferencia de tributos entre mapas habilitada <span class="ark-tooltip">(<span data-config="tribute_transfer_note">No elemento</span>)<span class="ark-tooltip-text">Los elementos no se pueden transferir entre mapas por balance</span></span></span>
+            </li>
+            <li class="ark-list-item" data-config="third_party_imprinting">
+              <i class="fas fa-check ark-list-icon icon-enabled"></i>
+              <span class="ark-list-text">Impronta de terceros activado</span>
+            </li>
+            <li class="ark-list-item" data-config="tribe_warfare">
+              <i class="fas fa-check ark-list-icon icon-enabled"></i>
+              <span class="ark-list-text">Guerra de tribus permitidas</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="ark-card">
+          <h3 class="ark-card-title">
+            <i class="fas fa-times ark-card-icon icon-disabled"></i>
+            Funciones Desactivadas
+          </h3>
+          <ul class="ark-list">
+            <li class="ark-list-item" data-config="cave_flyers">
+              <i class="fas fa-times ark-list-icon icon-disabled"></i>
+              <span class="ark-list-text">Voladores en cuevas desactivados</span>
+            </li>
+            <li class="ark-list-item" data-config="world_buffs">
+              <i class="fas fa-times ark-list-icon icon-disabled"></i>
+              <span class="ark-list-text">World Buffs (Genesis) desactivado</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="ark-card">
+          <h3 class="ark-card-title">
+            <i class="fas fa-dragon ark-card-icon" style="color: var(--ark-secondary);"></i>
+            Configuraciones Especiales
+          </h3>
+          <ul class="ark-list">
+            <li class="ark-list-item">
+              <i class="fas fa-check ark-list-icon icon-enabled"></i>
+              <span class="ark-list-text">Levelear velocidad en voladores permitido</span>
+            </li>
+            <li class="ark-list-item">
+              <i class="fas fa-volcano ark-list-icon icon-warning"></i>
+              <span class="ark-list-text">Ragnarok activado <span class="ark-tooltip">(erupción del volcán)<span class="ark-tooltip-text">El volcán de Ragnarok puede erupcionar causando eventos especiales</span></span></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRIBES CONFIG Section -->
+    <section class="ark-section">
+      <div class="ark-section-header">
+        <i class="fas fa-users ark-section-icon" style="color: var(--ark-secondary);"></i>
+        <h2 class="ark-section-title">Configuración de Tribus</h2>
+      </div>
+      <div class="ark-accordion">
+        <div class="ark-accordion-header" onclick="toggleAccordion('section-tribes')">
+          <h3 class="ark-accordion-title">
+            <i class="fas fa-list ark-card-icon" style="margin-right:0.5rem;color:var(--ark-primary)"></i>
+            Ver configuración de tribus
+          </h3>
+          <i class="fas fa-chevron-down ark-accordion-icon"></i>
+        </div>
+        <div class="ark-accordion-content" id="section-tribes">
+          <div class="ark-accordion-body">
+            <div class="ark-cards-grid">
+              <div class="ark-card">
+                <h3 class="ark-card-title">
+                  <i class="fas fa-user-friends ark-card-icon" style="color: var(--ark-primary);"></i>
+                  Límites de Tribus
+                </h3>
+                <table class="ark-table">
+                  <tbody>
+                    <tr>
+                      <td><strong>Máximo integrantes por tribu</strong></td>
+                      <td><span class="ark-badge ark-badge-primary" data-config="max_members">10 jugadores</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Máximo de alianzas</strong></td>
+                      <td><span class="ark-badge ark-badge-primary" data-config="max_alliances">2 alianzas</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Tribus por alianza</strong></td>
+                      <td><span class="ark-badge ark-badge-primary" data-config="tribes_per_alliance">4 tribus</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DINOS CONFIG Section - Using Accordion for better organization -->
+    <section class="ark-section">
+      <div class="ark-section-header">
+        <i class="fas fa-dragon ark-section-icon" style="color: var(--ark-success);"></i>
+        <h2 class="ark-section-title">Configuración de Dinosaurios</h2>
+      </div>
+      
+      <div class="ark-accordion">
+        <div class="ark-accordion-header" onclick="toggleAccordion('dino-levels')">
+          <h3 class="ark-accordion-title">
+            <i class="fas fa-level-up-alt" style="margin-right: 0.5rem; color: var(--ark-primary);"></i>
+            Niveles Máximos de Dinosaurios
+          </h3>
+          <i class="fas fa-chevron-down ark-accordion-icon"></i>
+        </div>
+        <div class="ark-accordion-content" id="dino-levels">
+          <div class="ark-accordion-body">
+            <div class="ark-cards-grid">
+              <div class="ark-card">
+                <h4 class="ark-card-title">
+                  <i class="fas fa-paw ark-card-icon" style="color: var(--ark-success);"></i>
+                  Dinosaurios Salvajes
+                </h4>
+                <table class="ark-table">
+                  <tbody>
+                    <tr>
+                      <td>Máx. nivel dino salvaje</td>
+                      <td><span class="ark-badge ark-badge-primary" data-config="max_wild_level">300</span></td>
+                    </tr>
+                    <tr>
+                      <td>Máx. nivel dino tek salvaje</td>
+                      <td><span class="ark-badge ark-badge-primary" data-config="max_tek_level">360</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <div class="ark-card">
+                <h4 class="ark-card-title">
+                  <i class="fas fa-egg ark-card-icon" style="color: var(--ark-secondary);"></i>
+                  Huevos Especiales
+                </h4>
+                <table class="ark-table">
+                  <tbody>
+                    <tr>
+                      <td>Máx. nivel huevo Wyvern</td>
+                      <td><span class="ark-badge ark-badge-warning" data-config="max_wyvern_level">380</span></td>
+                    </tr>
+                    <tr>
+                      <td>Máx. nivel huevo RockDrake</td>
+                      <td><span class="ark-badge ark-badge-warning" data-config="max_rockdrake_level">380</span></td>
+                    </tr>
+                    <tr>
+                      <td>Máx. nivel huevo Wyvern Crystal</td>
+                      <td><span class="ark-badge ark-badge-warning" data-config="max_crystal_wyvern_level">450</span></td>
+                    </tr>
+                    <tr>
+                      <td>Máx. nivel huevo Deino/Magma</td>
+                      <td><span class="ark-badge ark-badge-warning" data-config="max_deino_level">300</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ark-accordion" style="margin-top: 1rem;">
+        <div class="ark-accordion-header" onclick="toggleAccordion('breeding-stats')">
+          <h3 class="ark-accordion-title">
+            <i class="fas fa-heart" style="margin-right: 0.5rem; color: var(--ark-danger);"></i>
+            Configuración de Reproducción
+          </h3>
+          <i class="fas fa-chevron-down ark-accordion-icon"></i>
+        </div>
+        <div class="ark-accordion-content" id="breeding-stats">
+          <div class="ark-accordion-body">
+            <div class="ark-cards-grid">
+              <div class="ark-card">
+                <h4 class="ark-card-title">
+                  <i class="fas fa-stopwatch ark-card-icon" style="color: var(--ark-primary);"></i>
+                  Multiplicadores de Tiempo
+                </h4>
+                <ul class="ark-list">
+                  <li class="ark-list-item">
+                    <i class="fas fa-tachometer-alt ark-list-icon" style="color: var(--ark-secondary);"></i>
+                    <span class="ark-list-text">Velocidad de eclosión de huevos: <strong data-config="egg_hatch_speed">x6</strong></span>
+                  </li>
+                  <li class="ark-list-item">
+                    <i class="fas fa-seedling ark-list-icon" style="color: var(--ark-success);"></i>
+                    <span class="ark-list-text">Velocidad crecimiento crías: <strong data-config="baby_mature_speed">x6</strong></span>
+                  </li>
+                  <li class="ark-list-item">
+                    <i class="fas fa-chart-line ark-list-icon" style="color: var(--ark-primary);"></i>
+                    <span class="ark-list-text">Escala de Stats Imprint: <strong data-config="imprint_stat_scale">x1.3</strong></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DINOS BANEADOS Section -->
+    <section class="ark-section">
+      <div class="ark-section-header">
+        <i class="fas fa-ban ark-section-icon" style="color: var(--ark-danger);"></i>
+        <h2 class="ark-section-title">Dinosaurios Baneados</h2>
+      </div>
+      <div class="ark-accordion">
+        <div class="ark-accordion-header" onclick="toggleAccordion('section-dinos-banned')">
+          <h3 class="ark-accordion-title">
+            <i class="fas fa-list ark-card-icon" style="margin-right:0.5rem;color:var(--ark-danger)"></i>
+            Ver dinosaurios baneados
+          </h3>
+          <i class="fas fa-chevron-down ark-accordion-icon"></i>
+        </div>
+        <div class="ark-accordion-content" id="section-dinos-banned">
+          <div class="ark-accordion-body">
+            <div class="ark-cards-grid">
+              <div class="ark-card">
+                <h3 class="ark-card-title">
+                  <i class="fas fa-exclamation-triangle ark-card-icon icon-banned"></i>
+                  Especies Prohibidas
+                </h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                  <span class="ark-badge ark-badge-danger">Bronto</span>
+                  <span class="ark-badge ark-badge-danger">Bronto R</span>
+                  <span class="ark-badge ark-badge-danger">Megachelón</span>
+                  <span class="ark-badge ark-badge-danger">Astrocetus</span>
+                  <span class="ark-badge ark-badge-danger">Fjordhawk</span>
+                  <span class="ark-badge ark-badge-danger">Terrorbird</span>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--ark-text-muted);">
+                  <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+                  Estas especies están deshabilitadas por razones de balance del servidor.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENGRAMAS BANEADOS Section -->
+    <section class="ark-section">
+      <div class="ark-section-header">
+        <i class="fas fa-tools ark-section-icon" style="color: var(--ark-danger);"></i>
+        <h2 class="ark-section-title">Engramas Baneados</h2>
+      </div>
+      <div class="ark-accordion">
+        <div class="ark-accordion-header" onclick="toggleAccordion('section-engramas')">
+          <h3 class="ark-accordion-title">
+            <i class="fas fa-list ark-card-icon" style="margin-right:0.5rem;color:var(--ark-danger)"></i>
+            Ver engramas baneados
+          </h3>
+          <i class="fas fa-chevron-down ark-accordion-icon"></i>
+        </div>
+        <div class="ark-accordion-content" id="section-engramas">
+          <div class="ark-accordion-body">
+            <div class="ark-cards-grid">
+              <div class="ark-card">
+                <h3 class="ark-card-title">
+                  <i class="fas fa-hammer ark-card-icon icon-banned"></i>
+                  Objetos Prohibidos
+                </h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                  <span class="ark-badge ark-badge-danger">Clonadora</span>
+                  <span class="ark-badge ark-badge-danger">Jaula</span>
+                  <span class="ark-badge ark-badge-danger">Esposas</span>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--ark-text-muted);">
+                  <i class="fas fa-shield-alt" style="margin-right: 0.5rem;"></i>
+                  Estos engramas están deshabilitados para mantener un ambiente de juego justo.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Continue with remaining sections... -->
+    <!-- I'll add a script to handle the rest of the content dynamically -->
+    
+    <div id="additional-sections">
+      <!-- Additional sections will be loaded here -->
+    </div>
+
+  </main>
+
+  <div id="foot-home-container"></div>
+
+  <script>
+    // Navigation Loading
+    fetch('nav_bar_home.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('nav-bar-home-container').innerHTML = html;
+        // Execute scripts manually since innerHTML doesn't execute them
+        initializeNavbarScripts();
+      });
+    
+    fetch('ase_side_bar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('sidebar-container').innerHTML = html;
+      });
+
+    // Footer Loading
+    fetch('foot_home.html')
+      .then(r => r.text())
+      .then(html => document.getElementById('foot-home-container').innerHTML = html)
+      .catch(() => {});
+
+    // Initialize navbar functionality after dynamic loading
+    function initializeNavbarScripts() {
+      // Mobile navigation toggle
+      (function(){
+        var navRoot = document.querySelector('.nav.container');
+        if(!navRoot) return;
+        var toggle = navRoot.querySelector('.nav__toggle');
+        var list = navRoot.querySelector('.nav__list');
+        if(!toggle || !list) return;
+        
+        // Check if already initialized
+        if(toggle.hasAttribute('data-mobile-initialized')) return;
+        toggle.setAttribute('data-mobile-initialized', 'true');
+
+        toggle.addEventListener('click', function(e){
+          var expanded = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', String(!expanded));
+          list.classList.toggle('active');
+        });
+        
+        // Close when clicking outside
+        document.addEventListener('click', function(e){
+          if(!navRoot.contains(e.target) && list.classList.contains('active')){
+            list.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+        
+        // Close on Escape
+        document.addEventListener('keydown', function(e){
+          if(e.key === 'Escape' && list.classList.contains('active')){
+            list.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+      })();
+
+      // Dropdown menu for 'Juegos'
+      (function(){
+        var navRoot = document.querySelector('.nav.container');
+        if(!navRoot) return;
+        var dropdown = navRoot.querySelector('.nav__dropdown');
+        if(!dropdown) return;
+        var btn = dropdown.querySelector('.nav__dropdown-toggle');
+        if(!btn) return;
+
+        // Check if already initialized
+        if(btn.hasAttribute('data-dropdown-initialized')) return;
+        btn.setAttribute('data-dropdown-initialized', 'true');
+
+        // Toggle function
+        function toggleDropdown(open){
+          var isOpen = dropdown.classList.contains('open');
+          var shouldOpen = typeof open === 'boolean' ? open : !isOpen;
+          dropdown.classList.toggle('open', shouldOpen);
+          btn.setAttribute('aria-expanded', String(shouldOpen));
+        }
+
+        // click opens/closes
+        btn.addEventListener('click', function(e){
+          e.stopPropagation();
+          toggleDropdown();
+        });
+
+        // close when clicking outside
+        document.addEventListener('click', function(e){
+          if(!dropdown.contains(e.target) && dropdown.classList.contains('open')){
+            toggleDropdown(false);
+          }
+        });
+
+        // keyboard: Escape closes
+        document.addEventListener('keydown', function(e){
+          if(e.key === 'Escape' && dropdown.classList.contains('open')){
+            toggleDropdown(false);
+            btn.focus();
+          }
+        });
+
+        // Ensure submenu links close the dropdown on click
+        var submenuLinks = dropdown.querySelectorAll('.nav__submenu a');
+        submenuLinks.forEach(function(a){
+          a.addEventListener('click', function(){
+            toggleDropdown(false);
+          });
+        });
+      })();
+    }
+
+    // Accordion Functionality
+    function toggleAccordion(id) {
+      const accordion = document.getElementById(id).parentElement;
+      accordion.classList.toggle('active');
+    }
+
+    // Load additional sections
+    document.addEventListener('DOMContentLoaded', function() {
+      loadAdditionalSections();
+    });
+
+    function loadAdditionalSections() {
+      const additionalHTML = `
+        <!-- PLAYER STATS Section -->
+        <section class="ark-section">
+          <div class="ark-section-header">
+            <i class="fas fa-user ark-section-icon" style="color: var(--ark-primary);"></i>
+            <h2 class="ark-section-title">Estadísticas de Jugador</h2>
+          </div>
+          <div class="ark-accordion">
+            <div class="ark-accordion-header" onclick="toggleAccordion('section-player-stats')">
+              <h3 class="ark-accordion-title">
+                <i class="fas fa-list ark-card-icon" style="margin-right:0.5rem;color:var(--ark-primary)"></i>
+                Ver estadísticas de jugador
+              </h3>
+              <i class="fas fa-chevron-down ark-accordion-icon"></i>
+            </div>
+            <div class="ark-accordion-content" id="section-player-stats">
+              <div class="ark-accordion-body">
+                <div class="ark-cards-grid">
+                  <div class="ark-card">
+                    <h3 class="ark-card-title">
+                      <i class="fas fa-chart-bar ark-card-icon" style="color: var(--ark-success);"></i>
+                      Multiplicadores
+                    </h3>
+                    <table class="ark-table">
+                      <tbody>
+                        <tr>
+                          <td>Experiencia</td>
+                          <td><span class="ark-badge ark-badge-primary" data-config="experience_multiplier">x2</span></td>
+                        </tr>
+                        <tr>
+                          <td>Peso</td>
+                          <td><span class="ark-badge ark-badge-primary" data-config="weight_multiplier">x2</span></td>
+                        </tr>
+                        <tr>
+                          <td>Velocidad</td>
+                          <td><span class="ark-badge ark-badge-primary" data-config="speed_multiplier">x1.2</span></td>
+                        </tr>
+                        <tr>
+                          <td>Velocidad craft</td>
+                          <td><span class="ark-badge ark-badge-primary" data-config="craft_speed_multiplier">x1.2</span></td>
+                        </tr>
+                        <tr>
+                          <td>Velocidad doma</td>
+                          <td><span class="ark-badge ark-badge-warning" data-config="taming_speed_multiplier">x5</span></td>
+                        </tr>
+                        <tr>
+                          <td>Player Farm</td>
+                          <td><span class="ark-badge ark-badge-warning" data-config="player_harvest_multiplier">x4</span></td>
+                        </tr>
+                        <tr>
+                          <td>Dino Farm</td>
+                          <td><span class="ark-badge ark-badge-warning" data-config="dino_harvest_multiplier">x4</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LÍMITE DE DOMA Section -->
+        <section class="ark-section">
+          <div class="ark-section-header">
+            <i class="fas fa-list-ol ark-section-icon" style="color: var(--ark-secondary);"></i>
+            <h2 class="ark-section-title">Límites de Doma por Mapa</h2>
+          </div>
+          <div class="ark-accordion">
+            <div class="ark-accordion-header" onclick="toggleAccordion('section-doma')">
+              <h3 class="ark-accordion-title">
+                <i class="fas fa-list ark-card-icon" style="margin-right:0.5rem;color:var(--ark-secondary)"></i>
+                Ver límites de doma
+              </h3>
+              <i class="fas fa-chevron-down ark-accordion-icon"></i>
+            </div>
+            <div class="ark-accordion-content" id="section-doma">
+              <div class="ark-accordion-body">
+                <div class="ark-cards-grid">
+                  <div class="ark-card">
+                    <h3 class="ark-card-title">
+                      <i class="fas fa-map ark-card-icon" style="color: var(--ark-primary);"></i>
+                      Límites por Mapa
+                    </h3>
+                    <table class="ark-table">
+                      <thead>
+                        <tr>
+                          <th>Mapa</th>
+                          <th>Límite de Domas</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><td>Aberration</td><td><span class="ark-badge ark-badge-primary" data-config="tame_limit_aberration">300</span></td></tr>
+                        <tr><td>Crystal Isles</td><td><span class="ark-badge ark-badge-primary" data-config="tame_limit_crystal_isles">250</span></td></tr>
+                        <tr><td>Extinction</td><td><span class="ark-badge ark-badge-primary" data-config="tame_limit_extinction">300</span></td></tr>
+                        <tr><td>Fjordur</td><td><span class="ark-badge ark-badge-primary" data-config="tame_limit_fjordur">200</span></td></tr>
+                        <tr><td>Genesis 2</td><td><span class="ark-badge ark-badge-primary" data-config="tame_limit_genesis2">200</span></td></tr>
+                        <tr><td>Genesis</td><td><span class="ark-badge ark-badge-primary" data-config="tame_limit_genesis">300</span></td></tr>
+                        <tr><td>The Island</td><td><span class="ark-badge ark-badge-primary" data-config="tame_limit_the_island">200</span></td></tr>
+                        <tr><td>The Center</td><td><span class="ark-badge ark-badge-warning" data-config="tame_limit_the_center">350</span></td></tr>
+                        <tr><td>Scorched Earth</td><td><span class="ark-badge ark-badge-warning" data-config="tame_limit_scorched_earth">350</span></td></tr>
+                        <tr><td>Lost Island</td><td><span class="ark-badge ark-badge-warning" data-config="tame_limit_lost_island">350</span></td></tr>
+                        <tr><td>Ragnarok</td><td><span class="ark-badge ark-badge-primary" data-config="tame_limit_ragnarok">250</span></td></tr>
+                        <tr><td>Valguero</td><td><span class="ark-badge ark-badge-primary" data-config="tame_limit_valguero">250</span></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ESTRUCTURAS Section -->
+        <section class="ark-section">
+          <div class="ark-section-header">
+            <i class="fas fa-building ark-section-icon" style="color: #4ECDC4;"></i>
+            <h2 class="ark-section-title">Estructuras y Tiempo de Decay</h2>
+          </div>
+          <div class="ark-accordion">
+            <div class="ark-accordion-header" onclick="toggleAccordion('section-structures')">
+              <h3 class="ark-accordion-title">
+                <i class="fas fa-list ark-card-icon" style="margin-right:0.5rem;color:#4ECDC4"></i>
+                Ver configuración de estructuras
+              </h3>
+              <i class="fas fa-chevron-down ark-accordion-icon"></i>
+            </div>
+            <div class="ark-accordion-content" id="section-structures">
+              <div class="ark-accordion-body">
+                <div class="ark-accordion">
+                  <div class="ark-accordion-header" onclick="toggleAccordion('structure-settings')">
+                    <h3 class="ark-accordion-title">
+                      <i class="fas fa-cogs" style="margin-right: 0.5rem; color: var(--ark-primary);"></i>
+                      Configuraciones de Estructuras
+                    </h3>
+                    <i class="fas fa-chevron-down ark-accordion-icon"></i>
+                  </div>
+                  <div class="ark-accordion-content" id="structure-settings">
+                    <div class="ark-accordion-body">
+                      <div class="ark-cards-grid">
+                        <div class="ark-card">
+                          <h4 class="ark-card-title">
+                            <i class="fas fa-tools ark-card-icon" style="color: var(--ark-success);"></i>
+                            Configuraciones Generales
+                          </h4>
+                          <ul class="ark-list">
+                            <li class="ark-list-item">
+                              <i class="fas fa-times ark-list-icon icon-disabled"></i>
+                              <span class="ark-list-text" data-config="structure_collision">Colisión de estructuras desactivado</span>
+                            </li>
+                            <li class="ark-list-item">
+                              <i class="fas fa-check ark-list-icon icon-enabled"></i>
+                              <span class="ark-list-text" data-config="structure_pickup">Recoger estructuras activado</span>
+                            </li>
+                            <li class="ark-list-item">
+                              <i class="fas fa-times ark-list-icon icon-disabled"></i>
+                              <span class="ark-list-text" data-config="cave_building">Construcción en cuevas desactivado</span>
+                            </li>
+                            <li class="ark-list-item">
+                              <i class="fas fa-times ark-list-icon icon-disabled"></i>
+                              <span class="ark-list-text" data-config="spawn_point_building">Construcción en puntos de spawn desactivado</span>
+                            </li>
+                          </ul>
+                        </div>
+                        
+                        <div class="ark-card">
+                          <h4 class="ark-card-title">
+                            <i class="fas fa-clock ark-card-icon" style="color: var(--ark-secondary);"></i>
+                            Tiempos de Decay
+                          </h4>
+                          <table class="ark-table">
+                            <tbody>
+                              <tr><td>Paja</td><td><span class="ark-badge ark-badge-danger" data-config="decay_thatch">6 días</span></td></tr>
+                              <tr><td>Adobe</td><td><span class="ark-badge ark-badge-warning" data-config="decay_adobe">12 días</span></td></tr>
+                              <tr><td>Madera</td><td><span class="ark-badge ark-badge-warning" data-config="decay_wood">12 días</span></td></tr>
+                              <tr><td>Piedra</td><td><span class="ark-badge ark-badge-primary" data-config="decay_stone">18 días</span></td></tr>
+                              <tr><td>Metal</td><td><span class="ark-badge ark-badge-primary" data-config="decay_metal">24 días</span></td></tr>
+                              <tr><td>Tek</td><td><span class="ark-badge ark-badge-primary" data-config="decay_tek">30 días</span></td></tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LÍMITE DE ESTRUCTURAS Section -->
+        <section class="ark-section">
+          <div class="ark-section-header">
+            <i class="fas fa-list-alt ark-section-icon" style="color: var(--ark-secondary);"></i>
+            <h2 class="ark-section-title">Límite de Estructuras por Mapa</h2>
+          </div>
+          <div class="ark-accordion">
+            <div class="ark-accordion-header" onclick="toggleAccordion('section-structures-limits')">
+              <h3 class="ark-accordion-title">
+                <i class="fas fa-list ark-card-icon" style="margin-right:0.5rem;color:var(--ark-secondary)"></i>
+                Ver límites de estructuras
+              </h3>
+              <i class="fas fa-chevron-down ark-accordion-icon"></i>
+            </div>
+            <div class="ark-accordion-content" id="section-structures-limits">
+              <div class="ark-accordion-body">
+                <div class="ark-cards-grid">
+                  <div class="ark-card">
+                    <h3 class="ark-card-title">
+                      <i class="fas fa-home ark-card-icon" style="color: var(--ark-primary);"></i>
+                      Límites de Construcción
+                    </h3>
+                    <table class="ark-table">
+                      <thead>
+                        <tr>
+                          <th>Mapa</th>
+                          <th>Límite de Estructuras</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><td>Aberration</td><td><span class="ark-badge ark-badge-primary" data-config="structure_limit_aberration">3,000</span></td></tr>
+                        <tr><td>Crystal Isles</td><td><span class="ark-badge ark-badge-primary" data-config="structure_limit_crystal_isles">2,000</span></td></tr>
+                        <tr><td>Extinction</td><td><span class="ark-badge ark-badge-primary" data-config="structure_limit_extinction">3,000</span></td></tr>
+                        <tr><td>Fjordur</td><td><span class="ark-badge ark-badge-primary" data-config="structure_limit_fjordur">2,000</span></td></tr>
+                        <tr><td>Genesis 2</td><td><span class="ark-badge ark-badge-primary" data-config="structure_limit_genesis2">2,000</span></td></tr>
+                        <tr><td>Genesis</td><td><span class="ark-badge ark-badge-warning" data-config="structure_limit_genesis">4,000</span></td></tr>
+                        <tr><td>The Island</td><td><span class="ark-badge ark-badge-primary" data-config="structure_limit_the_island">2,000</span></td></tr>
+                        <tr><td>The Center</td><td><span class="ark-badge ark-badge-primary" data-config="structure_limit_the_center">3,000</span></td></tr>
+                        <tr><td>Scorched Earth</td><td><span class="ark-badge ark-badge-primary" data-config="structure_limit_scorched_earth">3,000</span></td></tr>
+                        <tr><td>Lost Island</td><td><span class="ark-badge ark-badge-primary" data-config="structure_limit_lost_island">3,000</span></td></tr>
+                        <tr><td>Ragnarok</td><td><span class="ark-badge ark-badge-primary" data-config="structure_limit_ragnarok">2,000</span></td></tr>
+                        <tr><td>Valguero</td><td><span class="ark-badge ark-badge-primary" data-config="structure_limit_valguero">2,000</span></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LEVEL MAX PLAYER Section -->
+        <section class="ark-section">
+          <div class="ark-section-header">
+            <i class="fas fa-star ark-section-icon" style="color: #5865F2;"></i>
+            <h2 class="ark-section-title">Nivel Máximo de Jugador</h2>
+          </div>
+          
+          <div class="ark-accordion">
+            <div class="ark-accordion-header" onclick="toggleAccordion('player-levels')">
+              <h3 class="ark-accordion-title">
+                <i class="fas fa-trophy" style="margin-right: 0.5rem; color: #5865F2;"></i>
+                Sistema de Niveles (Máximo: 205)
+              </h3>
+              <i class="fas fa-chevron-down ark-accordion-icon"></i>
+            </div>
+            <div class="ark-accordion-content" id="player-levels">
+              <div class="ark-accordion-body">
+                <div class="ark-cards-grid">
+                  <div class="ark-card">
+                    <h4 class="ark-card-title">
+                      <i class="fas fa-user ark-card-icon" style="color: var(--ark-success);"></i>
+                      Nivel Base
+                    </h4>
+                    <p>Nivel máximo BASE: <span class="ark-badge ark-badge-primary" data-config="max_base_level">105</span></p>
+                    <p style="font-size: 0.875rem; color: var(--ark-text-muted);">
+                      Puedes llegar a nivel 105 solo ganando experiencia con tu personaje.
+                    </p>
+                  </div>
+                  
+                  <div class="ark-card">
+                    <h4 class="ark-card-title">
+                      <i class="fas fa-crown ark-card-icon" style="color: var(--ark-secondary);"></i>
+                      Niveles por Ascensiones
+                    </h4>
+                    <table class="ark-table">
+                      <tbody>
+                        <tr>
+                          <td>The Island (Overseer)</td>
+                          <td><span class="ark-badge ark-badge-warning" data-config="levels_the_island">+15</span> → <strong>120</strong></td>
+                        </tr>
+                        <tr>
+                          <td>Scorched Earth (Mantícora)</td>
+                          <td><span class="ark-badge ark-badge-warning" data-config="levels_scorched_earth">+15</span> → <strong>135</strong></td>
+                        </tr>
+                        <tr>
+                          <td>Aberration (Rockwell)</td>
+                          <td><span class="ark-badge ark-badge-warning" data-config="levels_aberration">+15</span> → <strong>150</strong></td>
+                        </tr>
+                        <tr>
+                          <td>Genesis I (Master Controller)</td>
+                          <td><span class="ark-badge ark-badge-warning" data-config="levels_genesis1">+15</span> → <strong>165</strong></td>
+                        </tr>
+                        <tr>
+                          <td>Genesis II (Rockwell Terminus)</td>
+                          <td><span class="ark-badge ark-badge-warning" data-config="levels_genesis2">+15</span> → <strong>180</strong></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <div class="ark-card">
+                    <h4 class="ark-card-title">
+                      <i class="fas fa-gift ark-card-icon" style="color: var(--ark-primary);"></i>
+                      Niveles Adicionales
+                    </h4>
+                    <ul class="ark-list">
+                      <li class="ark-list-item">
+                        <i class="fas fa-paw ark-list-icon" style="color: var(--ark-success);"></i>
+                        <span class="ark-list-text">
+                          <strong>Niveles de CHIBI:</strong> <span data-config="chibi_levels">+5 niveles</span> equipándote un chibi y matando alphas
+                          <br><small style="color: var(--ark-text-muted);">Total: 185</small>
+                        </span>
+                      </li>
+                      <li class="ark-list-item">
+                        <i class="fas fa-rune-stone ark-list-icon" style="color: var(--ark-secondary);"></i>
+                        <span class="ark-list-text">
+                          <strong>Niveles de Runas:</strong> <span data-config="rune_levels">+10 niveles</span> encontrando TODAS (200) las runas en Fjordur
+                          <br><small style="color: var(--ark-text-muted);">Total: 195</small>
+                        </span>
+                      </li>
+                      <li class="ark-list-item">
+                        <i class="fas fa-scroll ark-list-icon" style="color: var(--ark-primary);"></i>
+                        <span class="ark-list-text">
+                          <strong>Niveles de Notas de Explorador:</strong> <span data-config="explorer_note_levels">+10 niveles</span> consiguiendo TODAS las notas de los mapas de historia
+                          <br><small style="color: var(--ark-text-muted);">Total: 205 (más de 1000 notas)</small>
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sección de reglas -->
+        <section class="ark-section">
+          <div class="ark-card" style="background: linear-gradient(135deg, rgba(255, 209, 102, 0.1) 0%, rgba(88, 101, 242, 0.1) 100%); border: 1px solid var(--ark-secondary);">
+            <h3 style="color: var(--ark-secondary); margin-top: 0; display: flex; align-items: center;">
+              <i class="fas fa-info-circle" style="margin-right: 0.75rem;"></i>
+              Importante: Reglas del servidor
+            </h3>
+            <div style="background: rgba(0, 0, 0, 0.2); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+              <p style="margin: 0; font-size: 0.925rem; line-height: 1.6; color: var(--ark-text);">
+                Antes de comenzar tu aventura, te pedimos que leas atentamente nuestras normas de convivencia y comportamiento. Al ingresar y jugar en nuestro servidor, se asume automáticamente que aceptas y respetas estas reglas.
+                <br><br>
+                <strong>Reglas Ark PVE Royal Server</strong> (<a href="https://heyzine.com/flip-book/7de819160a.html#page/1" target="_blank" rel="noopener" style="color: var(--ark-secondary); text-decoration: underline;">ver documento</a>)
+                <br><br>
+                Estas normas están diseñadas para garantizar una experiencia justa, divertida y segura para todos los jugadores. Respetarlas ayuda a mantener un ambiente cordial y amistoso dentro de la comunidad, evitando conflictos innecesarios.
+                <br><br>
+                <strong>Recuerda:</strong>
+                <ul style="margin: 0.5rem 0 0 1.25rem; padding: 0; color: var(--ark-text); font-size: 0.9rem;">
+                  <li>El incumplimiento de las reglas puede derivar en sanciones, desde advertencias hasta expulsión del servidor.</li>
+                  <li>Mantén siempre un comportamiento respetuoso hacia otros jugadores y hacia el staff.</li>
+                  <li>El sentido común y la buena educación son la base de nuestra comunidad.</li>
+                </ul>
+                <br>
+                Al continuar, confirmas que conoces estas normas y te comprometes a cumplirlas durante tu tiempo en el servidor.
+              </p>
+            </div>
+            <p style="margin-bottom: 0; font-size: 0.875rem; color: var(--ark-text-muted);">
+              Las configuraciones mostradas aquí pueden variar según eventos especiales y actualizaciones del servidor. 
+              Para consultas específicas, contacta al equipo de administración en Discord.
+            </p>
+          </div>
+        </section>
+      `;
+      
+      document.getElementById('additional-sections').innerHTML = additionalHTML;
+    }
+  </script>
+
+  <!-- ARK Config Loader - Sistema de configuraciones dinámicas -->
+  <script src="js/ark-config-loader.js"></script>
+</body>
+</html>

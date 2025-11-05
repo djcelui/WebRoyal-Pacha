@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Economía ARK - RoyalServers</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    /* Reset y configuración base */
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background: #080710;
+      color: #fff;
+      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    :root {
+      --ase-nav-offset: 72px;
+      --primary-color: #CFAE4D; /* Acento "Royal" (Dorado rico) - para navbar */
+      --economia-primary: #5865F2; /* Color principal de la página de economía */
+      --secondary-color: #FFD166;
+      --success-color: #4ECDC4;
+      --surface-color: #1B1035;
+      --border-color: #374151;
+    }
+
+    body {
+      padding-top: var(--ase-nav-offset);
+    }
+
+    @media(max-width: 640px) {
+      :root { --ase-nav-offset: 56px; }
+    }
+
+    /* Contenedor principal */
+    .economia-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Header del módulo */
+    .economia-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      background: linear-gradient(135deg, var(--economia-primary) 0%, #5B73F0 100%);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(88, 101, 242, 0.2);
+    }
+
+    .economia-title {
+      font-size: 2.5rem;
+      margin: 0 0 1rem 0;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .economia-subtitle {
+      font-size: 1.1rem;
+      margin: 0;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+
+    /* Botones de selección */
+    .tabla-selector {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .selector-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .selector-btn:hover {
+      background: rgba(88, 101, 242, 0.2);
+      border-color: var(--economia-primary);
+      transform: translateY(-2px);
+    }
+
+    .selector-btn.active {
+      background: var(--economia-primary);
+      border-color: var(--economia-primary);
+      box-shadow: 0 4px 16px rgba(88, 101, 242, 0.3);
+    }
+
+    /* Controles de búsqueda y filtros */
+    .controles-container {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .controles-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: end;
+    }
+
+    @media (max-width: 768px) {
+      .controles-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    .search-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .search-label {
+      font-weight: 600;
+      color: var(--secondary-color);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .search-input {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: #fff;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--economia-primary);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
+    }
+
+    .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: 200px;
+    }
+
+    .filter-select {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--economia-primary);
+      box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
+    }
+
+    .filter-select option {
+      background: #1B1035;
+      color: #fff;
+    }
+
+    /* Contenedor de tabla */
+    .tabla-container {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    /* Tabla */
+    .economia-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: transparent;
+    }
+
+    .economia-table th {
+      background: linear-gradient(135deg, var(--economia-primary) 0%, #5B73F0 100%);
+      color: #fff;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: none;
+    }
+
+    .economia-table td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    .economia-table tr:hover {
+      background: rgba(88, 101, 242, 0.1);
+    }
+
+    .economia-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Columnas específicas */
+    .col-categoria {
+      font-weight: 600;
+      color: var(--secondary-color);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    .col-nombre {
+      font-weight: 500;
+    }
+
+    .col-precio {
+      font-weight: 700;
+      color: var(--secondary-color);
+    }
+
+    .col-puntos {
+      font-weight: 700;
+      color: var(--success-color);
+    }
+
+    .col-level {
+      color: var(--economia-primary);
+      font-weight: 600;
+    }
+
+    .col-id {
+      color: var(--economia-primary);
+      font-weight: 600;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+    }
+
+    /* Estados de la tabla */
+    .tabla-estado {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-style: italic;
+    }
+
+    .tabla-hidden {
+      display: none;
+    }
+
+    /* Info adicional */
+    .tabla-info {
+      background: rgba(255, 209, 102, 0.1);
+      border: 1px solid var(--secondary-color);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      color: #fff;
+    }
+
+    .tabla-info i {
+      color: var(--secondary-color);
+      margin-right: 0.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .economia-container {
+        padding: 1rem;
+      }
+
+      .economia-title {
+        font-size: 2rem;
+      }
+
+      .tabla-selector {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .selector-btn {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .economia-table {
+        font-size: 0.8rem;
+      }
+
+      .economia-table th,
+      .economia-table td {
+        padding: 0.75rem 0.5rem;
+      }
+
+      /* Hacer tabla scrolleable horizontalmente en móvil */
+      .tabla-container {
+        overflow-x: auto;
+      }
+
+      .economia-table {
+        min-width: 600px;
+      }
+    }
+  </style>
+</head>
+<body class="has-sidebar">
+  <!-- Navigation bar container -->
+  <header class="header">
+    <div id="nav-bar-home-container"></div>
+  </header>
+  
+  <!-- Sidebar container -->
+  <div id="sidebar-container"></div>
+  
+  <main class="economia-container">
+    <!-- Header del módulo -->
+    <div class="economia-header">
+      <h1 class="economia-title">
+        <i class="fas fa-coins" style="margin-right: 1rem;"></i>
+        Economía del Servidor
+      </h1>
+      <p class="economia-subtitle">
+        Sistema de compra y venta de recursos, dinosaurios y objetos en RoyalServers ARK
+      </p>
+    </div>
+
+    <!-- Información -->
+    <div class="tabla-info">
+      <i class="fas fa-info-circle"></i>
+      <strong>¿Cómo funciona?</strong> Puedes comprar dinosaurios, recursos y objetos usando puntos del servidor, o vender tus items para obtener puntos. Los precios pueden variar según la disponibilidad y eventos especiales.
+    </div>
+
+    <!-- Botones de selección de tabla -->
+    <div class="tabla-selector">
+      <button class="selector-btn active" id="btn-comprar" onclick="cambiarTabla('comprar')">
+        <i class="fas fa-shopping-cart" style="margin-right: 0.5rem;"></i>
+        COSAS PARA COMPRAR
+      </button>
+      <button class="selector-btn" id="btn-vender" onclick="cambiarTabla('vender')">
+        <i class="fas fa-hand-holding-usd" style="margin-right: 0.5rem;"></i>
+        COSAS PARA VENDER
+      </button>
+    </div>
+
+    <!-- Controles de búsqueda y filtros -->
+    <div class="controles-container">
+      <div class="controles-grid">
+        <div class="search-group">
+          <label class="search-label" for="search-input">
+            <i class="fas fa-search" style="margin-right: 0.5rem;"></i>
+            Buscar por nombre
+          </label>
+          <input 
+            type="text" 
+            id="search-input" 
+            class="search-input" 
+            placeholder="Escribe para filtrar en tiempo real..."
+            oninput="filtrarTabla()"
+          >
+        </div>
+        <div class="filter-group">
+          <label class="search-label" for="categoria-filter">
+            <i class="fas fa-filter" style="margin-right: 0.5rem;"></i>
+            Filtrar por categoría
+          </label>
+          <select id="categoria-filter" class="filter-select" onchange="filtrarTabla()">
+            <option value="">Todas las categorías</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenedor de tabla -->
+    <div class="tabla-container">
+      <!-- Tabla de Compras -->
+      <div id="tabla-comprar-container">
+        <table class="economia-table" id="tabla-comprar">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Categoría</th>
+              <th>Nombre</th>
+              <th>Level</th>
+              <th>Precio</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-comprar-body">
+            <!-- Los datos se cargan dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tabla de Ventas -->
+      <div id="tabla-vender-container" class="tabla-hidden">
+        <table class="economia-table" id="tabla-vender">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Categoría</th>
+              <th>Nombre</th>
+              <th>Puntos</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-vender-body">
+            <!-- Los datos se cargan dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Estado de carga/error -->
+      <div id="tabla-loading" class="tabla-estado">
+        <i class="fas fa-spinner fa-spin" style="margin-right: 0.5rem;"></i>
+        Cargando datos...
+      </div>
+      <div id="tabla-error" class="tabla-estado tabla-hidden">
+        <i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>
+        Error al cargar los datos. Por favor, recarga la página.
+      </div>
+      <div id="tabla-empty" class="tabla-estado tabla-hidden">
+        <i class="fas fa-search" style="margin-right: 0.5rem;"></i>
+        No se encontraron resultados para la búsqueda actual.
+      </div>
+    </div>
+  </main>
+
+  <div id="foot-home-container"></div>
+
+  <script>
+    // Variables globales
+    let datosCompra = [];
+    let datosVenta = [];
+    let tablaActual = 'comprar';
+    let categorias = new Set();
+
+    // Cargar navegación y footer
+    fetch('nav_bar_home.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('nav-bar-home-container').innerHTML = html;
+        // Execute scripts manually since innerHTML doesn't execute them
+        initializeNavbarScripts();
+      });
+    
+    fetch('ase_side_bar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('sidebar-container').innerHTML = html;
+      });
+
+    fetch('foot_home.html')
+      .then(r => r.text())
+      .then(html => document.getElementById('foot-home-container').innerHTML = html)
+      .catch(() => {});
+
+    // Initialize navbar functionality after dynamic loading
+    function initializeNavbarScripts() {
+      // Mobile navigation toggle
+      (function(){
+        var navRoot = document.querySelector('.nav.container');
+        if(!navRoot) return;
+        var toggle = navRoot.querySelector('.nav__toggle');
+        var list = navRoot.querySelector('.nav__list');
+        if(!toggle || !list) return;
+        
+        // Check if already initialized
+        if(toggle.hasAttribute('data-mobile-initialized')) return;
+        toggle.setAttribute('data-mobile-initialized', 'true');
+
+        toggle.addEventListener('click', function(e){
+          var expanded = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', String(!expanded));
+          list.classList.toggle('active');
+        });
+        
+        // Close when clicking outside
+        document.addEventListener('click', function(e){
+          if(!navRoot.contains(e.target) && list.classList.contains('active')){
+            list.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+        
+        // Close on Escape
+        document.addEventListener('keydown', function(e){
+          if(e.key === 'Escape' && list.classList.contains('active')){
+            list.classList.remove('active');
+            toggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+      })();
+
+      // Dropdown menu for 'Juegos'
+      (function(){
+        var navRoot = document.querySelector('.nav.container');
+        if(!navRoot) return;
+        var dropdown = navRoot.querySelector('.nav__dropdown');
+        if(!dropdown) return;
+        var btn = dropdown.querySelector('.nav__dropdown-toggle');
+        if(!btn) return;
+
+        // Check if already initialized
+        if(btn.hasAttribute('data-dropdown-initialized')) return;
+        btn.setAttribute('data-dropdown-initialized', 'true');
+
+        // Toggle function
+        function toggleDropdown(open){
+          var isOpen = dropdown.classList.contains('open');
+          var shouldOpen = typeof open === 'boolean' ? open : !isOpen;
+          dropdown.classList.toggle('open', shouldOpen);
+          btn.setAttribute('aria-expanded', String(shouldOpen));
+        }
+
+        // click opens/closes
+        btn.addEventListener('click', function(e){
+          e.stopPropagation();
+          toggleDropdown();
+        });
+
+        // close when clicking outside
+        document.addEventListener('click', function(e){
+          if(!dropdown.contains(e.target) && dropdown.classList.contains('open')){
+            toggleDropdown(false);
+          }
+        });
+
+        // keyboard: Escape closes
+        document.addEventListener('keydown', function(e){
+          if(e.key === 'Escape' && dropdown.classList.contains('open')){
+            toggleDropdown(false);
+            btn.focus();
+          }
+        });
+
+        // Ensure submenu links close the dropdown on click
+        var submenuLinks = dropdown.querySelectorAll('.nav__submenu a');
+        submenuLinks.forEach(function(a){
+          a.addEventListener('click', function(){
+            toggleDropdown(false);
+          });
+        });
+      })();
+    }
+
+    // Cargar datos al inicializar la página
+    document.addEventListener('DOMContentLoaded', function() {
+      cargarDatos();
+    });
+
+    // Función para cargar datos de los JSON
+    async function cargarDatos() {
+      try {
+        // TODO: Actualizar las rutas de los JSON si cambian de ubicación
+        const [compraResponse, ventaResponse] = await Promise.all([
+          fetch('data/compra.json'),
+          fetch('data/venta.json')
+        ]);
+
+        if (!compraResponse.ok || !ventaResponse.ok) {
+          throw new Error('Error al cargar los archivos JSON');
+        }
+
+        datosCompra = await compraResponse.json();
+        datosVenta = await ventaResponse.json();
+
+        // Extraer categorías únicas
+        extraerCategorias();
+        
+        // Poblar filtro de categorías
+        poblarFiltroCategoria();
+
+        // Mostrar tabla inicial (comprar)
+        mostrarTabla('comprar');
+
+        // Ocultar estado de carga
+        document.getElementById('tabla-loading').classList.add('tabla-hidden');
+
+      } catch (error) {
+        console.error('Error cargando datos:', error);
+        document.getElementById('tabla-loading').classList.add('tabla-hidden');
+        document.getElementById('tabla-error').classList.remove('tabla-hidden');
+      }
+    }
+
+    // Extraer categorías únicas de ambos datasets
+    function extraerCategorias() {
+      categorias.clear();
+      [...datosCompra, ...datosVenta].forEach(item => {
+        if (item.CAT) {
+          categorias.add(item.CAT);
+        }
+      });
+    }
+
+    // Poblar el select de categorías
+    function poblarFiltroCategoria() {
+      const select = document.getElementById('categoria-filter');
+      // Limpiar opciones existentes (excepto "Todas")
+      select.innerHTML = '<option value="">Todas las categorías</option>';
+      
+      // Añadir categorías ordenadas alfabéticamente
+      [...categorias].sort().forEach(categoria => {
+        const option = document.createElement('option');
+        option.value = categoria;
+        option.textContent = categoria;
+        select.appendChild(option);
+      });
+    }
+
+    // Cambiar entre tablas
+    function cambiarTabla(tipo) {
+      tablaActual = tipo;
+      
+      // Actualizar botones
+      document.querySelectorAll('.selector-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.getElementById(`btn-${tipo}`).classList.add('active');
+
+      // Limpiar búsqueda
+      document.getElementById('search-input').value = '';
+      document.getElementById('categoria-filter').value = '';
+
+      // Mostrar tabla correspondiente
+      mostrarTabla(tipo);
+    }
+
+    // Mostrar tabla según el tipo
+    function mostrarTabla(tipo) {
+      // Ocultar todas las tablas
+      document.getElementById('tabla-comprar-container').classList.add('tabla-hidden');
+      document.getElementById('tabla-vender-container').classList.add('tabla-hidden');
+      document.getElementById('tabla-empty').classList.add('tabla-hidden');
+
+      // Mostrar tabla correspondiente
+      document.getElementById(`tabla-${tipo}-container`).classList.remove('tabla-hidden');
+
+      // Poblar tabla
+      if (tipo === 'comprar') {
+        poblarTablaCompra(datosCompra);
+      } else {
+        poblarTablaVenta(datosVenta);
+      }
+    }
+
+    // Poblar tabla de compras
+    function poblarTablaCompra(datos) {
+      const tbody = document.getElementById('tabla-comprar-body');
+      tbody.innerHTML = '';
+
+      // Mostrar máximo 8 items si no hay filtro activo
+      const busqueda = document.getElementById('search-input').value.toLowerCase();
+      const categoriaFiltro = document.getElementById('categoria-filter').value;
+      
+      let datosFiltrados = datos;
+      
+      if (busqueda || categoriaFiltro) {
+        datosFiltrados = datos.filter(item => {
+          const coincideNombre = !busqueda || item.NOMBRE.toLowerCase().includes(busqueda);
+          const coincideCategoria = !categoriaFiltro || item.CAT === categoriaFiltro;
+          return coincideNombre && coincideCategoria;
+        });
+      } else {
+        // Sin filtros, mostrar solo los primeros 8
+        datosFiltrados = datos.slice(0, 8);
+      }
+
+      if (datosFiltrados.length === 0) {
+        document.getElementById('tabla-comprar-container').classList.add('tabla-hidden');
+        document.getElementById('tabla-empty').classList.remove('tabla-hidden');
+        return;
+      }
+
+      datosFiltrados.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="col-id">${item.ID}</td>
+          <td class="col-categoria">${item.CAT}</td>
+          <td class="col-nombre">${item.NOMBRE}</td>
+          <td class="col-level">${item.LEVEL}</td>
+          <td class="col-precio">${item.PRECIO.toLocaleString()} puntos</td>
+          <td>${item['CANT.']}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Poblar tabla de ventas
+    function poblarTablaVenta(datos) {
+      const tbody = document.getElementById('tabla-vender-body');
+      tbody.innerHTML = '';
+
+      // Mostrar máximo 8 items si no hay filtro activo
+      const busqueda = document.getElementById('search-input').value.toLowerCase();
+      const categoriaFiltro = document.getElementById('categoria-filter').value;
+      
+      let datosFiltrados = datos;
+      
+      if (busqueda || categoriaFiltro) {
+        datosFiltrados = datos.filter(item => {
+          const coincideNombre = !busqueda || item.NOMBRE.toLowerCase().includes(busqueda);
+          const coincideCategoria = !categoriaFiltro || item.CAT === categoriaFiltro;
+          return coincideNombre && coincideCategoria;
+        });
+      } else {
+        // Sin filtros, mostrar solo los primeros 8
+        datosFiltrados = datos.slice(0, 8);
+      }
+
+      if (datosFiltrados.length === 0) {
+        document.getElementById('tabla-vender-container').classList.add('tabla-hidden');
+        document.getElementById('tabla-empty').classList.remove('tabla-hidden');
+        return;
+      }
+
+      datosFiltrados.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="col-id">${item.ID}</td>
+          <td class="col-categoria">${item.CAT}</td>
+          <td class="col-nombre">${item.NOMBRE}</td>
+          <td class="col-puntos">${item.PUNTOS.toLocaleString()} puntos</td>
+          <td>${item['CANT.']}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    // Filtrar tabla en tiempo real
+    function filtrarTabla() {
+      if (tablaActual === 'comprar') {
+        poblarTablaCompra(datosCompra);
+      } else {
+        poblarTablaVenta(datosVenta);
+      }
+    }
+  </script>
+</body>
+</html>

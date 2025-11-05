@@ -1,0 +1,195 @@
+<!-- nav_bar_home.html: Módulo de navegación reutilizable para Home -->
+<nav class="nav container">
+  <a href="index.html" class="nav__logo" style="display:flex;align-items:center;gap:10px;">
+    <img src="img/RS_LOGO.png" alt="RoyalServers Logo" style="height:38px;width:auto;vertical-align:middle;">
+    <span class="nav-logo-text" style="font-family:'Montserrat',sans-serif;font-size:1.45rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;line-height:1;">
+      <span style="color:var(--primary-color);">ROYAL</span><span style="color:#fff;">SERVERS</span>
+    </span>
+  </a>
+  <ul class="nav__list">
+  <li><a href="index.html#quienes-somos" class="nav__link">Quiénes Somos</a></li>
+  <li class="nav__item nav__dropdown">
+    <button class="nav__link nav__dropdown-toggle nav__link--bold" aria-haspopup="true" aria-expanded="false">Juegos ▾</button>
+    <ul class="nav__submenu" role="menu" aria-label="Lista de juegos">
+      <li role="none"><a role="menuitem" href="minecraft_home.html" class="nav__link">Minecraft</a></li>
+      <li role="none"><a role="menuitem" href="rust_home.html" class="nav__link">Rust</a></li>
+      <li role="none"><a role="menuitem" href="ase_home.html" class="nav__link">ARK Survival Evolved</a></li>
+      <li role="none"><a role="menuitem" href="ASA_home.html" class="nav__link">ARK Survival Ascended</a></li>
+    </ul>
+  </li>
+  <li><a href="index.html#creadores" class="nav__link">Creadores</a></li>
+  <li><a href="index.html#testimonios" class="nav__link">Opiniones</a></li>
+  </ul>
+
+  <!-- Minimal styles scoped to this fragment for the dropdown -->
+  <style>
+    /* Dropdown base */
+    .nav__dropdown{position:relative}
+    .nav__submenu{display:none;position:absolute;top:100%;left:0;background:#181818;border-radius:8px;padding:6px 0;min-width:220px;box-shadow:0 8px 20px rgba(0,0,0,0.45);z-index:220}
+    .nav__submenu li{list-style:none}
+    .nav__submenu a{display:block;padding:10px 16px;color:var(--text-color);text-decoration:none;font-weight:500}
+    .nav__submenu a:hover{background:rgba(255,255,255,0.02);color:var(--primary-color)}
+    .nav__dropdown.open > .nav__submenu{display:block}
+
+    /* Style the dropdown toggle so it visually matches links and doesn't show a box */
+    .nav__dropdown-toggle{
+      background:transparent !important;
+      border:0 !important;
+      color:var(--text-color) !important;
+      padding:6px 8px;
+      font:inherit;
+      cursor:pointer;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      appearance:none;
+    }
+    .nav__dropdown-toggle:hover{color:var(--primary-color)}
+    /* Remove default focus rectangle/inner focus; keep element focusable for keyboard users */
+    .nav__dropdown-toggle:focus{outline:none !important;box-shadow:none !important;background:transparent !important}
+    .nav__dropdown-toggle::-moz-focus-inner{border:0}
+  /* Force bold to match other nav links */
+  .nav__link--bold{font-weight:700}
+
+    /* Mobile: when the main nav list is stacked, make submenu flow with the list */
+    @media (max-width:700px){
+      .nav__submenu{position:relative;top:auto;left:auto;box-shadow:none;padding-left:12px;padding-right:12px}
+      .nav__submenu a{padding:10px 0}
+    }
+  </style>
+  <!-- Mobile hamburger toggle (styled via CSS, shown on small screens) -->
+  <button class="nav__toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+
+  <div class="nav__actions" style="display:flex;align-items:center;gap:10px;">
+    <a href="https://dsc.gg/royalserver" target="_blank" class="btn btn--primary nav__btn">Únete a Discord</a>
+    <a href="login.html" class="btn btn--secondary nav__btn">Login</a>
+  </div>
+</nav>
+
+<script>
+  // Toggle mobile nav list: keeps desktop behavior unchanged - Enhanced for dynamic loading
+  (function(){
+    function initMobileNav() {
+      // Find this nav fragment's root element
+      var scriptEl = document.currentScript;
+      var navRoot = scriptEl && scriptEl.previousElementSibling;
+      // If previousElementSibling is not the nav (depends on placement), fallback to searching
+      if(!navRoot || !navRoot.classList || !navRoot.classList.contains('nav')){
+        navRoot = document.querySelector('.nav.container');
+      }
+      if(!navRoot) return false;
+      var toggle = navRoot.querySelector('.nav__toggle');
+      var list = navRoot.querySelector('.nav__list');
+      if(!toggle || !list) return false;
+
+      // Check if already initialized to avoid duplicate listeners
+      if(toggle.hasAttribute('data-mobile-initialized')) return true;
+      toggle.setAttribute('data-mobile-initialized', 'true');
+
+      toggle.addEventListener('click', function(e){
+        var expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!expanded));
+        list.classList.toggle('active');
+      });
+      
+      // Close when clicking outside
+      document.addEventListener('click', function(e){
+        if(!navRoot.contains(e.target) && list.classList.contains('active')){
+          list.classList.remove('active');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Close on Escape
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && list.classList.contains('active')){
+          list.classList.remove('active');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      return true;
+    }
+
+    // Try to initialize immediately (for static loading)
+    if(!initMobileNav()) {
+      // If not available immediately, wait for DOM ready
+      if(document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          setTimeout(initMobileNav, 100);
+        });
+      } else {
+        // Document is already ready, try after a short delay for dynamic insertion
+        setTimeout(initMobileNav, 100);
+      }
+    }
+  })();
+</script>
+<script>
+  // Dropdown for 'Juegos' (works on desktop and mobile) - Enhanced for dynamic loading
+  (function(){
+    function initDropdown() {
+      var navRoot = document.querySelector('.nav.container');
+      if(!navRoot) return false;
+      var dropdown = navRoot.querySelector('.nav__dropdown');
+      if(!dropdown) return false;
+      var btn = dropdown.querySelector('.nav__dropdown-toggle');
+      if(!btn) return false;
+
+      // Check if already initialized to avoid duplicate listeners
+      if(btn.hasAttribute('data-dropdown-initialized')) return true;
+      btn.setAttribute('data-dropdown-initialized', 'true');
+
+      // Toggle function
+      function toggleDropdown(open){
+        var isOpen = dropdown.classList.contains('open');
+        var shouldOpen = typeof open === 'boolean' ? open : !isOpen;
+        dropdown.classList.toggle('open', shouldOpen);
+        btn.setAttribute('aria-expanded', String(shouldOpen));
+      }
+
+      // click opens/closes
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        toggleDropdown();
+      });
+
+      // close when clicking outside
+      document.addEventListener('click', function(e){
+        if(!dropdown.contains(e.target) && dropdown.classList.contains('open')){
+          toggleDropdown(false);
+        }
+      });
+
+      // keyboard: Escape closes
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && dropdown.classList.contains('open')){
+          toggleDropdown(false);
+          btn.focus();
+        }
+      });
+
+      // Ensure submenu links close the dropdown on click (mobile friendliness)
+      var submenuLinks = dropdown.querySelectorAll('.nav__submenu a');
+      submenuLinks.forEach(function(a){
+        a.addEventListener('click', function(){
+          toggleDropdown(false);
+        });
+      });
+
+      return true;
+    }
+
+    // Try to initialize immediately (for static loading)
+    if(!initDropdown()) {
+      // If not available immediately, wait for DOM ready
+      if(document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          setTimeout(initDropdown, 100);
+        });
+      } else {
+        // Document is already ready, try after a short delay for dynamic insertion
+        setTimeout(initDropdown, 100);
+      }
+    }
+  })();
+</script>
